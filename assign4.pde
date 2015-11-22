@@ -1,234 +1,165 @@
-//You should implement your assign3 here.
-PImage start2,start1,backGround1,backGround2,fighter,treasure,hp,end1,end2;
-int backGround1x=0,backGround2x=640,treasurex=(int)random(620),treasurey=(int)random(430),k=40,playA=0,playB=0,v=0;int b=-320,a=(int)random(430);
-PImage[] enemy =new PImage[8];PImage[] flame=new PImage[5];
-int[] e =new int[8];{
-e[0]=0;}
-int[] ey =new int[8];
-float fighterx=580,bx;
-float fightery=220,by;
-float speed = 5;
-boolean upPressed,playing,l= false;
-boolean downPressed = false;
-boolean leftPressed = false;
-boolean rightPressed = false;
-void setup () {
-  for(int i=0;i<5;i++)
-    {
-        e[i]=-(80*i);
-    }
-    for(int i=5;i<8;i++)
-    {
-        e[i]=-(80*i)-80;
-    }
-  size(640, 480) ;
-  start2=loadImage("img/start2.png");
-  start1=loadImage("img/start1.png");
-  backGround1 = loadImage("img/bg1.png");
-  backGround2 = loadImage("img/bg2.png");
+int state = 1, flightStatus = 1, bg1x = 0, bg2x = -640, hpx = 40, treasureX = floor(random(160,550)), treasureY = floor(random(50,390)), fighterX = 480, fighterY = floor(random(120,360)), treasureXeat = 0, treasureYeat = 0, boomX = 0, boomY = 0, boomCounter = 0, enemyY1 = floor(random(120,360)), enemyY2 = floor(random(20,260)), enemyY3 = floor(random(120,360)), counter = 0;
+int [] enemyX = new int [18];
+int [] enemyY = new int [18];
+PImage bg1, bg2, end1, end2, enemy, fighter, flame1, flame2,flame3, flame4, flame5, hp, start1, start2, treasure, shoot;
+PImage [] flame = new PImage [5];
+boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, boom = false;
+
+void setup (){
+  size(640,480);
+  frameRate = 30;
+  bg1 = loadImage("img/bg1.png");
+  bg2 = loadImage("img/bg2.png");
+  end1 = loadImage("img/end1.png");
+  end2 = loadImage("img/end2.png");
+  enemy = loadImage("img/enemy.png");
   fighter = loadImage("img/fighter.png");
-  treasure = loadImage("img/treasure.png");
-  for(int i=0;i<8;i++){
-  enemy[i] = loadImage("img/enemy.png");}
-  for(int i=0;i<5;i++){
-  flame[i] = loadImage("img/flame"+(i+1)+".png");}
-  frameRate=30;
+  flame[0] = loadImage("img/flame1.png");
+  flame[1] = loadImage("img/flame2.png");
+  flame[2] = loadImage("img/flame3.png");
+  flame[3] = loadImage("img/flame4.png");
+  flame[4] = loadImage("img/flame5.png");
   hp = loadImage("img/hp.png");
-  end2=loadImage("img/end2.png");
-  end1=loadImage("img/end1.png");
+  start1 = loadImage("img/start1.png");
+  start2 = loadImage("img/start2.png");
+  treasure = loadImage("img/treasure.png");
+  //  setup enemy arrays
+  for(int i = 0; i < 5; i ++){enemyX[i] = 0 - 70*i;}
+  for(int i = 5; i < 10; i++){enemyX[i] = -920 - 70*(i-6);}
+  for(int i = 10; i < 15; i++){enemyX[i] = -1840 - 70*(i-11);}
+  for(int i = 15; i < 18; i++){enemyX[i] = -1840 - 70*(i-15);}
+  for(int i = 0; i < 5; i ++){enemyY[i] = enemyY1;}
+  for(int i = 5; i < 10; i++){enemyY[i] = enemyY2 + 40*(i-5);}
+  for(int i = 10; i < 13; i++){enemyY[i] = enemyY3 - 40*(i-10);}
+  for(int i = 13; i < 15; i++){enemyY[i] = enemyY3-40 + 40*(i-13);}
+  for(int i = 15; i < 17; i++){enemyY[i] = enemyY3 + 40*(i-14);}
+  enemyY[17] = enemyY3 + 40;
 }
-
-void draw() {
-  
-  image(start2,0,0);
-  if(pmouseX>=100&&pmouseX<=540&&pmouseY>=300&&pmouseY<=420){
-    image(start1,0,0);
-  }
-  if(mousePressed){
-    if(pmouseX>=100&&pmouseX<=540&&pmouseY>=300&&pmouseY<=420)
-    playB=2;
-  }
-  switch(playB){
-  case 2:
-  if(keyPressed)
-  if (k==-100) {k=40;fighterx=580;fightery=220;}
-
-  if (upPressed) {
-    fightery -= speed;
-  }
-  if (downPressed) {
-    fightery += speed;
-  }
-  if (leftPressed) {
-    fighterx -= speed;
-  }
-  if (rightPressed) {
-    fighterx += speed;
-  }
-  if (fighterx >=580) {
-    fighterx -=speed;
-  }
-  if (fighterx <=0) {
-    fighterx +=speed;
-  }
-  if (fightery <=0) {
-    fightery +=speed;
-  }
-   if (fightery >=430) {
-    fightery -=speed;
-  }
-   if (treasurex >=fighterx-5 && treasurey>=fightery-10  && treasurey<=fightery+60 && treasurex <=fighterx+60 && k<200) {
-    k+=20;treasurex=(int)random(600);treasurey=(int)random(430);
-  }
-  if (treasurex >=fighterx-5 && treasurey>=fightery-10  && treasurey<=fightery+60 && treasurex <=fighterx+60 ) {
-    ;treasurex=(int)random(600);treasurey=(int)random(430);
-  }
-  if (k<=0) {k=-100;
-  for(int i=0;i<5;i++)
-    {
-        e[i]=-(80*i);
-    }
-    playB=1;
-   }
-  if(playB==2){
-  background(0);
-  image(backGround1,backGround1x-640,0);
-  image(backGround2,backGround2x-640,0);
-  image(fighter,fighterx,fightery);
-  image(treasure,treasurex,treasurey);
-  backGround1x%=1280;backGround2x%=1280;
-  b+=3;
-    image(hp,40,40);
-  fill(255,0,0,75);
-    rect(45,45,k,20,100);
-      
-  if(playA==0){
-  for(int i=0;i<5;i++){
-    //e[i]=e[0]-60*i;
-    image(enemy[i],e[i],ey[i]=a+0*i);}
-    if (b >= 640) {b=-320;
-    ;a=(int)random(245,430);playA=1;for(int i=0;i<5;i++)
-    {
-        e[i]=-(80*i);
-    }}
-     for(int i=0;i<5;i++)
-    {
-        e[i]+=3;
-        if(e[i]+10 >=fighterx-5 && ey[i]+10>=fightery-20  && ey[i]+10<=fightery+60 && e[i]+10 <=fighterx+60)
-        {
-            e[i]+=640;k-=40;
+void draw(){
+  switch(state){
+    case 1 :   // start
+      boolean startbgX = false;
+      boolean startbgY = false;
+      if (mouseX>200 && mouseX<460){startbgX = true;}
+      if (mouseY>375 && mouseY<420){startbgY = true;}
+      if (startbgX == true && startbgY == true){
+        image(start1,0,0);
+        if (mousePressed){state = 2;}
+      }else{image(start2,0,0);}
+      break;
+    case 2 :   //playing
+      // bakground
+      image(bg1,bg1x,0);
+      image(bg2,bg2x,0);
+      bg1x += 1;
+      bg2x += 1;
+      if (bg1x == 640){bg1x = -640;}
+      if (bg2x == 640){bg2x = -640;}
+      // hp
+      fill(255,0,0);
+      rect(48,44,hpx,22);
+      image(hp,40,40);
+      if(hpx <= 0){state=3;boom = false;}
+      // treasure
+      image(treasure,treasureX,treasureY);
+      if (fighterX > (treasureX-50) && fighterX < (treasureX+40)){
+        treasureXeat = 1;
+      }else{treasureXeat = 0;}
+      if (fighterY > (treasureY-50) && fighterY < (treasureY+40)){
+        treasureYeat = 1;
+      }else{treasureYeat = 0;}
+      if (treasureXeat == 1 && treasureYeat == 1){
+        treasureX = floor(random(160,550));
+        treasureY = floor(random(50,390));
+        if (hpx <= 190){hpx += 20;}
+      }
+      //enemy
+      for(int i =0; i < enemyX.length; i++){
+        image(enemy,enemyX[i],enemyY[i]);
+        enemyX[i] += 4;
+        if(enemyX[i]-fighterX > -50 && enemyX[i]-fighterX < 50 && enemyY[i]-fighterY > -50 && enemyY[i]-fighterY < 50){
+          if(hpx >= 10){
+            boomX = enemyX[i];
+            boomY = enemyY[i];
+            boom = true;
+            hpx -=40;
+            enemyX[i]=1000;
+          }
         }
-    }
-   
-  
-
+      }
+      counter += 4;
+      if(counter > 2740){
+        counter = 0;
+        int enemyY1 = floor(random(120,360));
+        int enemyY2 = floor(random(20,260));
+        int enemyY3 = floor(random(120,360));
+        for(int i = 0; i < 5; i ++){enemyX[i] = 0 - 70*i;}
+        for(int i = 5; i < 10; i++){enemyX[i] = -920 - 70*(i-6);}
+        for(int i = 10; i < 15; i++){enemyX[i] = -1840 - 70*(i-11);}
+        for(int i = 15; i < 18; i++){enemyX[i] = -1840 - 70*(i-15);}
+        for(int i = 0; i < 5; i ++){enemyY[i] = enemyY1;}
+        for(int i = 5; i < 10; i++){enemyY[i] = enemyY2 + 40*(i-5);}
+        for(int i = 10; i < 13; i++){enemyY[i] = enemyY3 - 40*(i-10);}
+        for(int i = 13; i < 15; i++){enemyY[i] = enemyY3-40 + 40*(i-13);}
+        for(int i = 15; i < 17; i++){enemyY[i] = enemyY3 + 40*(i-14);}
+        enemyY[17] = enemyY3 + 40;
+      }
+      //boom
+      if(boom){
+        boomCounter ++;
+        if(boomCounter < 3){image(flame[0],boomX,boomY);}
+        else if(boomCounter < 6){image(flame[1],boomX,boomY);}
+        else if(boomCounter < 9){image(flame[2],boomX,boomY);}
+        else if(boomCounter < 12){image(flame[3],boomX,boomY);}
+        else if(boomCounter < 15){image(flame[4],boomX,boomY);}
+        else{boom = false;boomCounter = 0;}
+      }
+      //fighter
+      image(fighter,fighterX,fighterY);
+      if (upPressed){if (fighterY >= 10){fighterY -= 5;}}
+      if (downPressed){if (fighterY <= 419){fighterY += 5;}}
+      if (leftPressed){if (fighterX >= 10){fighterX -= 5;}}
+      if (rightPressed){if(fighterX <= 600){fighterX += 5;}}
+      break;
+    case 3 : // end
+      boolean endbgX = false;
+      boolean endbgY = false;
+      if (mouseX>200 && mouseX<440){endbgX = true;}
+      if (mouseY>310 && mouseY<350){endbgY = true;}
+      if (endbgX == true && endbgY == true){
+        image(end1,0,0);
+        if (mousePressed){
+          state = 2;
+          hpx = 40;
+          fighterX = 480;
+          for(int i = 0; i < 5; i ++){enemyX[i] = 0 - 70*i;}
+          for(int i = 5; i < 10; i++){enemyX[i] = -920 - 70*(i-6);}
+          for(int i = 10; i < 15; i++){enemyX[i] = -1840 - 70*(i-11);}
+          for(int i = 15; i < 18; i++){enemyX[i] = -1840 - 70*(i-15);}
+          enemyY1 =floor(random(120,360));
+        }
+      }else{image(end2,0,0);}
+      break;
+  }
 }
-     if(playA==1){
-    for(int i=0;i<5;i++){
-    image(enemy[i],e[i],ey[i]=a-50*i);}
-    if (b >= 640) {b=-320;
-    for(int i=5;i<8;i++)
-    {
-        e[i]=-(80*(i-5))-80;
-    }
-    ;a=(int)random(95,335);playA=2;
-    for(int i=0;i<5;i++)
-    {
-        e[i]=-(80*i);
-    }
-  }
-   for(int i=0;i<5;i++)
-    {
-        e[i]+=3;
-        if(e[i]+10 >=fighterx-5 && ey[i]+10>=fightery-20  && ey[i]+10<=fightery+60 && e[i]+10 <=fighterx+60)
-        {bx=e[i];by=ey[i];
-            e[i]+=640;k-=40;l=true;v=0;}
-             
-        
-          /*if(l){v++;}
-          if(l)
-          {
-                 if(v<3)  {image(flame[0],bx,by);}
-            else if(v<6)  {image(flame[1],bx,by);}
-            else if(v<9)  {image(flame[2],bx,by);}
-            else if(v<12) {image(flame[3],bx,by);}
-            else if(v<15) {image(flame[4],bx,by);}
-            else l=false;v=0;}
-            //if(v>15){v=0;}*/
-        }
-        
-}}
-    
-     if(playA==2){
-    image(enemy[0],e[0],ey[0]=a);
-    image(enemy[1],e[1],ey[1]=a+50*1);
-    image(enemy[2],e[2],ey[2]=a+50*2);
-    image(enemy[3],e[3],ey[3]=a+50*1);
-    image(enemy[4],e[4],ey[4]=a);
-    image(enemy[5],e[5],ey[5]=a-50*1);
-    image(enemy[6],e[6],ey[6]=a-50*2);
-    image(enemy[7],e[7],ey[7]=a-50*1);
-    if (b >= 640) {a=(int)random(430);b=-320;for(int i=0;i<5;i++)
-    {
-        e[i]=-(80*i);
-    }
-    playA=0;}
-  for(int i=0;i<8;i++)
-    {
-        e[i]+=3;
-        if(e[i]+10 >=fighterx-5 && ey[i]+10>=fightery-20  && ey[i]+10<=fightery+60 && e[i]+10 <=fighterx+60)
-        {
-            e[i]+=640;k-=40;
-        }
-    }
-     };
-     case 1:
-   if (playB==1) {k=-100;playA=0;b=-320;a=(int)random(430);
-   image(end2,0,0);
-    if(pmouseX>=100&&pmouseX<=540&&pmouseY>=300&&pmouseY<=420){
-    image(end1,0,0);}
-  
-  
-  if(mousePressed){
-    if(pmouseX>=100&&pmouseX<=540&&pmouseY>=300&&pmouseY<=420)
-    playA=2;//k=200;
-  }break;}}
-                       
-  }
-
-
 void keyPressed(){
-  if (key == CODED) { // detect special keys 
+  if (key == CODED) { 
     switch (keyCode) {
-      case UP:
-        upPressed = true;
-        break;
-      case DOWN:
-        downPressed = true;
-        break;
-      case LEFT:
-        leftPressed = true;
-        break;
-      case RIGHT:
-        rightPressed = true;
-        break;
+      case UP:upPressed = true;break;
+      case DOWN:downPressed = true;break;
+      case LEFT:leftPressed = true;break;
+      case RIGHT:rightPressed = true;break;
     }
   }
 }
-
 void keyReleased(){
   if (key == CODED) {
-      switch (keyCode) {
-        case UP:
-          upPressed = false;
-          break;
-        case DOWN:
-          downPressed = false;
-          break;
-        case LEFT:
-          leftPressed = false;
-          break;
-        case RIGHT:
-          rightPressed = false;
-          break;}}
+    switch (keyCode) {
+      case UP:upPressed = false;break;
+      case DOWN:downPressed = false;break;
+      case LEFT:leftPressed = false;break;
+      case RIGHT:rightPressed = false;break;
+    }
+  }
 }
+
